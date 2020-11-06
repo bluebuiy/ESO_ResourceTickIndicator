@@ -1,0 +1,11 @@
+## Title: Resource Tick Indicator
+## APIVersion: 100033
+## SavedVariables: ResourceTickBarPosition
+## Description: Tracks the passive resource restore tick that occurs every 2 seconds.
+## IsLibrary: false
+## Version: 1
+## Author: bluebuiy
+
+TickBar.xml
+ResourceTickIndicator.lua
+
