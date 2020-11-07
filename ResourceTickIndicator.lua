@@ -191,6 +191,8 @@ function RTIaddon:Initialize()
     ResourceTickBar:ClearAnchors()
     ResourceTickBar:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, self.saved_variables.left, self.saved_variables.top)
 
+    HUD_SCENE:AddFragment(ZO_SimpleSceneFragment:New(ResourceTickBar))
+
 end
 
 EVENT_MANAGER:RegisterForEvent(RTIaddon.name, EVENT_ADD_ON_LOADED, RTIaddon.OnAddOnLoaded)
