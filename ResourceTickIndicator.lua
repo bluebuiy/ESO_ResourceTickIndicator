@@ -191,7 +191,10 @@ function RTIaddon:Initialize()
     ResourceTickBar:ClearAnchors()
     ResourceTickBar:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, self.saved_variables.left, self.saved_variables.top)
 
-    HUD_SCENE:AddFragment(ZO_SimpleSceneFragment:New(ResourceTickBar))
+    local fragment = ZO_SimpleSceneFragment:New(ResourceTickBar)
+
+    SCENE_MANAGER:GetScene("hudui"):AddFragment(fragment)
+    SCENE_MANAGER:GetScene("hud"):AddFragment(fragment)
 
 end
 
