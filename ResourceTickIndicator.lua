@@ -154,7 +154,7 @@ function RTIaddon.PlayerResourceChange(event, unit, power, type, powerValue, pow
         RTIaddon.last_known_passive_regen = now
         RTIaddon.latency_at_last = latency
         --d("Passive regen detected at " .. (now - RTIaddon.start_time) / 1000)
-        SetBarAnimDurationAndPlay(2000)
+        SetBarAnimDurationAndPlay(RTIaddon.RESOURCE_RESTORE_PERIOD - latency / 2)
     end
 
 end
