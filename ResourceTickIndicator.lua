@@ -143,7 +143,7 @@ function RTIaddon.PlayerResourceChange(event, unit, power, type, powerValue, pow
     local offset = 0
     local envelope = 100
     if RTIaddon.last_known_passive_regen ~= 0 then
-        offset = RTIaddon.RESOURCE_RESTORE_PERIOD - now - RTIaddon.last_known_passive_regen
+        offset = RTIaddon.RESOURCE_RESTORE_PERIOD - (now - RTIaddon.last_known_passive_regen)
         -- account for latency differences between the two sample points.  Assume the one-way trip time is half rtt.
         -- then make it a bit bigger.
         envelope = RTIaddon.latency_at_last / 2 - latency / 2 + 10
@@ -154,6 +154,7 @@ function RTIaddon.PlayerResourceChange(event, unit, power, type, powerValue, pow
         RTIaddon.last_known_passive_regen = now
         RTIaddon.latency_at_last = latency
         --d("Passive regen detected at " .. (now - RTIaddon.start_time) / 1000)
+        -- releasing the usage needs to happen early on the client.  Apparently the server doesn't do latency correction.
         SetBarAnimDurationAndPlay(RTIaddon.RESOURCE_RESTORE_PERIOD - latency / 2)
     end
 
