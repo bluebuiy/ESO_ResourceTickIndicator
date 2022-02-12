@@ -81,8 +81,13 @@ function myabs(a)
 end
 
 function SetBarAnimDurationAndPlay(dur)
-    RTIaddon.bar_animation:SetDuration(dur)
-    RTIaddon.bar_timeline:SetCallbackOffset(RTIaddon.bar_callback, dur + 200)
+
+    CreateBarAnimation(dur)
+
+    -- bug with setting callback offset, keeps getting pushed back
+    --RTIaddon.bar_animation:SetDuration(dur)
+    --RTIaddon.bar_timeline:SetCallbackOffset(RTIaddon.bar_callback, 0)
+    
     RTIaddon.bar_timeline:PlayFromStart()
 end
 
@@ -93,19 +98,19 @@ function BarAnimCallback()
         --local nextRegenTick = now + (RTIaddon.RESOURCE_RESTORE_PERIOD - ((now - RTIaddon.last_known_passive_regen) % RTIaddon.RESOURCE_RESTORE_PERIOD))
         --local rem = nextRegenTick - now -- RTIaddon.RESOURCE_RESTORE_PERIOD - (passedTime % RTIaddon.RESOURCE_RESTORE_PERIOD)
         local dur = (RTIaddon.RESOURCE_RESTORE_PERIOD - ((now - RTIaddon.last_known_passive_regen) % RTIaddon.RESOURCE_RESTORE_PERIOD))
-        --d("Duration: " .. dur)
+        --d("Duration: " .. (now - RTIaddon.last_known_passive_regen) % 2000)
         SetBarAnimDurationAndPlay(dur)
    end
 end
 
-function CreateBarAnimation()
+function CreateBarAnimation(dur)
 
     local timeline = ANIMATION_MANAGER:CreateTimeline()
     timeline:SetPlaybackType(0, 1)
     -- callback so we can restart the animation if we need to
-    RTIaddon.bar_callback = timeline:InsertCallback(BarAnimCallback, RTIaddon.RESOURCE_RESTORE_PERIOD + 200)
+    RTIaddon.bar_callback = timeline:InsertCallback(BarAnimCallback, dur + 200)
     local anim = timeline:InsertAnimation(ANIMATION_SIZE, ResourceTickBarStatusBar, 0)
-    anim:SetDuration(RTIaddon.RESOURCE_RESTORE_PERIOD)
+    anim:SetDuration(dur)
     anim:SetEasingFunction(ZO_LinearEase)
     
     anim:SetStartWidth(1)
@@ -186,7 +191,7 @@ function RTIaddon:Initialize()
 
     EVENT_MANAGER:RegisterForEvent(self.name, EVENT_PLAYER_COMBAT_STATE, self.CombatStateChange)
 
-    CreateBarAnimation()
+    --CreateBarAnimation()
 
     self.saved_variables = ZO_SavedVars:New("ResourceTickBarPosition", 1, nil, {})
     ResourceTickBar:ClearAnchors()
